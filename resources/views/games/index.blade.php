@@ -16,61 +16,71 @@
         <p class="text-gray-600 text-sm mb-2">{{ Str::limit($game->description, 100) }}</p>
         <p class="text-blue-600 font-bold">${{ $game->price }}</p>
         
-        <div class="mt-4 space-y-2">
+       <div class="mt-3 flex flex-wrap gap-2 justify-center text-xs">
 
-    <!-- VIEW button -->
-    <a href="{{ route('games.show', $game) }}" 
-       class="block text-center bg-blue-600 text-white py-2 rounded">
+    <!-- VIEW -->
+    <a href="{{ route('games.show', $game) }}"
+        class="px-3 py-1 bg-blue-600 text-white rounded flex items-center gap-1 hover:bg-blue-700">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2"
+             viewBox="0 0 24 24"><path d="M2.5 12s4-7 9.5-7 9.5 7 9.5 7-4 7-9.5 7-9.5-7-9.5-7z"/><circle cx="12" cy="12" r="3"/></svg>
         View
     </a>
 
     @auth
 
-    {{-- BUY only if stock > 0 --}}
-    @if($game->stock > 0)
-        <form action="{{ route('orders.store') }}" method="POST">
-            @csrf
-            <input type="hidden" name="game_id" value="{{ $game->id }}">
-            <button class="w-full bg-green-600 text-white py-2 rounded">
-                Buy Now
-            </button>
-        </form>
-    @else
-        <div class="w-full bg-red-600 text-white py-2 rounded text-center">
-            SOLD OUT
-        </div>
-    @endif
+        {{-- BUY --}}
+        @if($game->stock > 0)
+            <form action="{{ route('orders.store') }}" method="POST">
+                @csrf
+                <input type="hidden" name="game_id" value="{{ $game->id }}">
+                <button class="px-3 py-1 bg-green-600 text-white rounded flex items-center gap-1 hover:bg-green-700">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2"
+                         viewBox="0 0 24 24"><path d="M3 3h2l3 12h11l3-8H6"/></svg>
+                    Buy
+                </button>
+            </form>
+        @else
+            <div class="px-3 py-1 bg-red-600 text-white rounded flex items-center gap-1">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2"
+                     viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12"/></svg>
+                Sold
+            </div>
+        @endif
 
-    {{-- RENT only if stock > 0 AND rental price exists --}}
-    @if($game->rental_price && $game->stock > 0)
-        <a href="{{ route('rentals.create', $game) }}" 
-           class="block text-center bg-yellow-600 text-white py-2 rounded">
-            Rent
-        </a>
-    @endif
+        {{-- RENT --}}
+        @if($game->rental_price && $game->stock > 0)
+            <a href="{{ route('rentals.create', $game) }}"
+               class="px-3 py-1 bg-yellow-600 text-white rounded flex items-center gap-1 hover:bg-yellow-700">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2"
+                     viewBox="0 0 24 24"><path d="M12 6v6l4 2m6-2a10 10 0 11-20 0 10 10 0 0120 0z"/></svg>
+                Rent
+            </a>
+        @endif
 
-    {{-- ADMIN CONTROLS --}}
-    @if(auth()->user()->isAdmin())
-        <a href="{{ route('games.edit', $game) }}" 
-           class="block text-center bg-gray-600 text-white py-2 rounded">
-            Edit
-        </a>
+        {{-- ADMIN ONLY --}}
+        @if(auth()->user()->isAdmin())
+            <a href="{{ route('games.edit', $game) }}"
+               class="px-3 py-1 bg-gray-600 text-white rounded flex items-center gap-1 hover:bg-gray-700">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2"
+                     viewBox="0 0 24 24"><path d="M11 5l7 7-7 7-7-7 7-7z"/></svg>
+                Edit
+            </a>
 
-        <form action="{{ route('games.destroy', $game) }}" 
-              method="POST"
-              onsubmit="return confirm('Delete this game?');">
-            @csrf
-            @method('DELETE')
-            <button class="w-full bg-red-600 text-white py-2 rounded">
-                Delete
-            </button>
-        </form>
-    @endif
+            <form action="{{ route('games.destroy', $game) }}" method="POST"
+                  onsubmit="return confirm('Delete this game?');">
+                @csrf
+                @method('DELETE')
+                <button class="px-3 py-1 bg-red-600 text-white rounded flex items-center gap-1 hover:bg-red-700">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2"
+                         viewBox="0 0 24 24"><path d="M3 6h18M9 6V4h6v2m-9 0v12h12V6"/></svg>
+                    Del
+                </button>
+            </form>
+        @endif
 
-@endauth
-
-
+    @endauth
 </div>
+
 
     </div>
     @endforeach
