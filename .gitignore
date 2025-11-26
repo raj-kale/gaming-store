@@ -1,0 +1,58 @@
+# Laravel Framework
+/vendor/
+/node_modules/
+
+# Laravel Environment Files
+.env
+.env.*
+!.env.example
+
+# Laravel Cache & Logs
+/storage/*.key
+/storage/logs/*
+/storage/framework/*
+/bootstrap/cache/*.php
+
+# Laravel Vapor
+/.vapor/
+
+# Laravel Nova
+/.nova/
+
+# Laravel PHPUnit
+.phpunit.result.cache
+/.phpunit.cache
+
+# Vite & Build Artifacts
+/public/build
+/public/hot
+
+# Public Storage (symlink only)
+public/storage
+
+# System Files
+.DS_Store
+Thumbs.db
+
+# IDE & Editor Folders
+/.idea
+/.fleet
+/.vscode
+/.zed
+
+# Composer Auth
+auth.json
+
+# Other Tooling
+.phpactor.json
+
+# Ignore log files anywhere
+*.log
+
+# Optional: Ignore backup env files
+.env.backup
+.env.production
+.env.development
+
+# Ignore test artifacts
+.phpunit.cache
