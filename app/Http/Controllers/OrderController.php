@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\Game;
@@ -20,6 +21,12 @@ class OrderController extends Controller
         $game = Game::findOrFail($request->game_id);
         $quantity = $request->quantity ?? 1;
 
+        // ❗ Prevent over-buying
+        if ($game->stock < $quantity) {
+            return back()->with('error', 'This game is out of stock.');
+        }
+
+        // Create the order
         Order::create([
             'user_id' => auth()->id(),
             'game_id' => $game->id,
@@ -27,6 +34,7 @@ class OrderController extends Controller
             'total' => $game->price * $quantity,
         ]);
 
+        // Decrease stock
         $game->decrement('stock', $quantity);
 
         return redirect()->route('orders.index')->with('success', 'Order placed!');

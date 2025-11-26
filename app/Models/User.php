@@ -40,4 +40,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Rental::class);
     }
+
+    public function isAdmin()
+{
+    return $this->email === 'admin@test.com';
+}
+
 }

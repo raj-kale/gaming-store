@@ -17,18 +17,61 @@
         <p class="text-blue-600 font-bold">${{ $game->price }}</p>
         
         <div class="mt-4 space-y-2">
-            <a href="{{ route('games.show', $game) }}" class="block text-center bg-blue-600 text-white py-2 rounded">View</a>
-            @auth
-                <form action="{{ route('orders.store') }}" method="POST">
-                    @csrf
-                    <input type="hidden" name="game_id" value="{{ $game->id }}">
-                    <button class="w-full bg-green-600 text-white py-2 rounded">Buy Now</button>
-                </form>
-                @if($game->rental_price)
-                    <a href="{{ route('rentals.create', $game) }}" class="block text-center bg-yellow-600 text-white py-2 rounded">Rent</a>
-                @endif
-            @endauth
+
+    <!-- VIEW button -->
+    <a href="{{ route('games.show', $game) }}" 
+       class="block text-center bg-blue-600 text-white py-2 rounded">
+        View
+    </a>
+
+    @auth
+
+    {{-- BUY only if stock > 0 --}}
+    @if($game->stock > 0)
+        <form action="{{ route('orders.store') }}" method="POST">
+            @csrf
+            <input type="hidden" name="game_id" value="{{ $game->id }}">
+            <button class="w-full bg-green-600 text-white py-2 rounded">
+                Buy Now
+            </button>
+        </form>
+    @else
+        <div class="w-full bg-red-600 text-white py-2 rounded text-center">
+            SOLD OUT
         </div>
+    @endif
+
+    {{-- RENT only if stock > 0 AND rental price exists --}}
+    @if($game->rental_price && $game->stock > 0)
+        <a href="{{ route('rentals.create', $game) }}" 
+           class="block text-center bg-yellow-600 text-white py-2 rounded">
+            Rent
+        </a>
+    @endif
+
+    {{-- ADMIN CONTROLS --}}
+    @if(auth()->user()->isAdmin())
+        <a href="{{ route('games.edit', $game) }}" 
+           class="block text-center bg-gray-600 text-white py-2 rounded">
+            Edit
+        </a>
+
+        <form action="{{ route('games.destroy', $game) }}" 
+              method="POST"
+              onsubmit="return confirm('Delete this game?');">
+            @csrf
+            @method('DELETE')
+            <button class="w-full bg-red-600 text-white py-2 rounded">
+                Delete
+            </button>
+        </form>
+    @endif
+
+@endauth
+
+
+</div>
+
     </div>
     @endforeach
 </div>
