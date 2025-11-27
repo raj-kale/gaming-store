@@ -33,6 +33,11 @@
                     <a href="{{ route('login') }}" class="hover:text-blue-600">Login</a>
                      <a href="{{ route('register') }}" class="ml-4">Register</a>
                 @endauth
+
+                @auth
+    <a href="{{ route('cart.index') }}" class="hover:text-blue-600">🛒 Cart</a>
+@endauth
+
             </div>
 
         </div>

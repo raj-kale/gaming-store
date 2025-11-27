@@ -40,23 +40,30 @@
     @auth
 
         {{-- BUY --}}
-        @if($game->stock > 0)
-            <form action="{{ route('orders.store') }}" method="POST">
-                @csrf
-                <input type="hidden" name="game_id" value="{{ $game->id }}">
-                <button class="px-3 py-1 bg-green-600 text-white rounded flex items-center gap-1 hover:bg-green-700">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2"
-                         viewBox="0 0 24 24"><path d="M3 3h2l3 12h11l3-8H6"/></svg>
-                    Buy
-                </button>
-            </form>
-        @else
-            <div class="px-3 py-1 bg-red-600 text-white rounded flex items-center gap-1">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2"
-                     viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12"/></svg>
-                Sold
-            </div>
-        @endif
+@if($game->stock > 0)
+    <form action="{{ route('checkout') }}" method="GET" class="m-0 p-0">
+        <input type="hidden" name="game_id" value="{{ $game->id }}">
+        <input type="hidden" name="quantity" value="1">
+
+        <button type="submit"
+            class="px-3 py-1 bg-green-600 text-white rounded flex items-center gap-1 hover:bg-green-700">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2"
+                 viewBox="0 0 24 24"><path d="M3 3h2l3 12h11l3-8H6"/></svg>
+            Buy
+        </button>
+    </form>
+@endif
+
+
+
+        {{-- ADD TO CART --}}
+<form action="{{ route('cart.add', $game) }}" method="POST">
+    @csrf
+    <button class="px-3 py-1 bg-blue-600 text-white rounded flex items-center gap-1 hover:bg-blue-700">
+         Cart
+    </button>
+</form>
+
 
         {{-- RENT --}}
         @if($game->rental_price && $game->stock > 0)
