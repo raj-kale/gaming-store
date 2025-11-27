@@ -18,16 +18,20 @@
 
             <div class="flex items-center gap-6 text-gray-700 font-medium">
                 @auth
+                    
                     <a href="{{ route('orders.index') }}" class="hover:text-blue-600">My Orders</a>
                     <a href="{{ route('rentals.index') }}" class="hover:text-blue-600">My Rentals</a>
+                    
+                    @if(auth()->user()->isAdmin())
                     <a href="{{ route('games.create') }}" class="hover:text-blue-600">Add Game</a>
-
+                    @endif
                     <form method="POST" action="{{ route('logout') }}" class="inline">
                         @csrf
                         <button class="hover:text-red-600">Logout</button>
                     </form>
                 @else
                     <a href="{{ route('login') }}" class="hover:text-blue-600">Login</a>
+                     <a href="{{ route('register') }}" class="ml-4">Register</a>
                 @endauth
             </div>
 

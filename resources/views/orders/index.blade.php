@@ -11,7 +11,7 @@
             <div class="bg-white shadow p-4 rounded">
                 <h2 class="font-bold text-xl">{{ $order->game->title }}</h2>
                 <p>Quantity: {{ $order->quantity }}</p>
-                <p>Total: ${{ $order->total }}</p>
+                <p>Total: Rs. {{ $order->total }}</p>
                 <p class="text-gray-500 text-sm">Ordered on {{ $order->created_at->format('M d, Y') }}</p>
             </div>
         @endforeach

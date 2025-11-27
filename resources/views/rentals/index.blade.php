@@ -23,7 +23,7 @@
                 <p class="text-gray-700"><strong>End:</strong> {{ $rental->end_date->format('M d, Y') }}</p>
 
                 <p class="mt-2 font-semibold text-blue-600">
-                    Total: ${{ $rental->total }}
+                    Total: Rs. {{ $rental->total }}
                 </p>
 
             </div>

@@ -24,7 +24,7 @@
 
     <div class="mb-4">
         <p class="text-gray-700">
-            <strong>Price per day:</strong> ${{ $game->rental_price }}
+            <strong>Price per day:</strong> Rs. {{ $game->rental_price }}
         </p>
         <p class="text-gray-700">
             <strong>Game:</strong> {{ $game->title }}
