@@ -110,7 +110,7 @@
 <form action="{{ route('cart.add', $game) }}" method="POST">
     @csrf
     <button class="px-3 py-1 bg-blue-600 text-white rounded flex items-center gap-1 hover:bg-blue-700">
-         Cart
+         Add to Cart
     </button>
 </form>
 
