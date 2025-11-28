@@ -3,6 +3,50 @@
 @section('content')
 <h1 class="text-3xl font-bold mb-6">All Games</h1>
 
+<!-- SEARCH + FILTER + SORT -->
+<form method="GET" action="{{ route('home') }}" class="mb-6 bg-white p-4 rounded shadow grid grid-cols-4 gap-4">
+
+    <!-- Search -->
+    <div>
+        <label class="text-sm font-semibold">Search</label>
+        <input type="text" name="search" value="{{ request('search') }}"
+               placeholder="Search games..."
+               class="w-full border rounded px-3 py-2">
+    </div>
+
+    <!-- Price Min -->
+    <div>
+        <label class="text-sm font-semibold">Min Price</label>
+        <input type="number" name="price_min" value="{{ request('price_min') }}"
+               class="w-full border rounded px-3 py-2">
+    </div>
+
+    <!-- Price Max -->
+    <div>
+        <label class="text-sm font-semibold">Max Price</label>
+        <input type="number" name="price_max" value="{{ request('price_max') }}"
+               class="w-full border rounded px-3 py-2">
+    </div>
+
+    <!-- Sort -->
+    <div>
+        <label class="text-sm font-semibold">Sort</label>
+        <select name="sort" class="w-full border rounded px-3 py-2">
+            <option value="">Latest</option>
+            <option value="price_low"  {{ request('sort')=='price_low' ? 'selected':'' }}>Price: Low → High</option>
+            <option value="price_high" {{ request('sort')=='price_high' ? 'selected':'' }}>Price: High → Low</option>
+        </select>
+    </div>
+
+    <!-- Submit button (full width) -->
+    <div class="col-span-4">
+        <button class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
+            Apply Filters
+        </button>
+    </div>
+</form>
+
+
 <div class="grid grid-cols-3 gap-6">
     
     @foreach($games as $game)

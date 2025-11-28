@@ -6,6 +6,7 @@ use App\Http\Controllers\CartController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [GameController::class, 'index'])->name('home');
+Route::get('/games', [GameController::class, 'index'])->name('games.index');
 Route::resource('games', GameController::class);
 Route::delete('games/{game}/image/{media}', [GameController::class, 'deleteImage'])->name('games.image.delete');
 

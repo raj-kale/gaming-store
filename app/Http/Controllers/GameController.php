@@ -7,10 +7,44 @@ use Illuminate\Http\Request;
 class GameController extends Controller
 {
     // Show all games (public)
-    public function index()
+    public function index(Request $request)
     {
-        $games = Game::latest()->get();
-        return view('games.index', compact('games'));
+        
+        $query = Game::query();
+
+    // SEARCH
+    if ($request->filled('search')) {
+        $search = $request->search;
+        $query->where(function ($q) use ($search) {
+            $q->where('title', 'LIKE', "%{$search}%")
+              ->orWhere('description', 'LIKE', "%{$search}%");
+        });
+    }
+
+    //price filter MIN
+    if($request->filled('price_min')){
+        $query->where('price','>=', $request->price_min);
+    }
+
+    //price filter MAX
+    if($request->filled('price_max')){
+        $query->where('price','<=', $request->price_max);
+    }
+
+    //sort
+    if($request->sort==='price_low'){
+        $query->orderBy('price','asc');
+    } elseif($request->sort==='price_high'){
+        $query->orderBy('price','desc');
+    } else{
+        $query->latest();
+    }
+
+    //fetch
+    $games=$query->get();
+    return view('games.index', compact('games'));
+
+
     }
 
     // Admin: Show create form
