@@ -83,6 +83,8 @@
 
     @auth
         
+    <!-- user only -->
+    @if(!auth()->user()->isAdmin())
     
         {{-- BUY --}}
 
@@ -101,7 +103,7 @@
         <!-- askjdkajsdnkajsndkjasndkjnad -->
     </form>
 @endif
-
+@endif
 
 
         {{-- ADD TO CART --}}
