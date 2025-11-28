@@ -98,6 +98,8 @@
                  viewBox="0 0 24 24"><path d="M3 3h2l3 12h11l3-8H6"/></svg>
             Buy
         </button>
+
+        <!-- askjdkajsdnkajsndkjasndkjnad -->
     </form>
 @endif
 
