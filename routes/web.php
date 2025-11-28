@@ -3,6 +3,7 @@ use App\Http\Controllers\GameController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\RentalController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ReportController;
 
 Route::get('/', [GameController::class, 'index'])->name('home');
 Route::resource('games', GameController::class);
@@ -19,3 +20,20 @@ Route::middleware('auth')->group(function () {
     Route::post('rentals/{game}', [RentalController::class, 'store'])->name('rentals.store');
     Route::post('rentals/{rental}/return', [RentalController::class, 'return'])->name('rentals.return');
 });
+
+Route::middleware(['auth','is_admin'])->prefix('admin')->group(function () {
+    // show admin rentals tracking page
+    Route::get('rentals', [ReportController::class, 'rentalsIndex'])->name('admin.rentals.index');
+
+    // mark rental as returned (PATCH)
+    Route::patch('rentals/{id}/return', [ReportController::class, 'markReturned'])->name('admin.rentals.return');
+});
+
+
+// temporary debug route — remove after debugging
+Route::get('/whoami', function () {
+    return response()->json([
+        'auth_check' => auth()->check(),
+        'user'       => auth()->user(),
+    ]);
+})->middleware('web'); // ensure web session middleware is applied
