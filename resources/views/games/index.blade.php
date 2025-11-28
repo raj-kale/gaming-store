@@ -103,7 +103,7 @@
         <!-- askjdkajsdnkajsndkjasndkjnad -->
     </form>
 @endif
-@endif
+
 
 
         {{-- ADD TO CART --}}
@@ -124,7 +124,7 @@
                 Rent
             </a>
         @endif
-
+         @endif
         {{-- ADMIN ONLY --}}
         @if(auth()->user()->isAdmin())
             <a href="{{ route('games.edit', $game) }}"
