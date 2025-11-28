@@ -23,6 +23,8 @@
         @endif
         <p class="text-gray-600 mb-6">Stock: {{ $game->stock }}</p>
 
+       @if(!auth()->user()->isAdmin())
+ 
         @auth
             <form action="{{ route('orders.store') }}" method="POST" class="mb-3">
                 @csrf
@@ -33,6 +35,7 @@
                 <a href="{{ route('rentals.create', $game) }}" class="block text-center bg-yellow-600 text-white py-3 rounded">Rent This Game</a>
             @endif
         @endauth
+         @endif
     </div>
 </div>
 @endsection
