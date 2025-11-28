@@ -46,4 +46,9 @@ class User extends Authenticatable
     return $this->email === 'admin@test.com';
 }
 
+public function transactions() {
+    return $this->hasMany(\App\Models\Transaction::class, 'user_id');
+}
+
+
 }

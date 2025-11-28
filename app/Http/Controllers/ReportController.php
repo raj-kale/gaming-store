@@ -15,19 +15,17 @@ class ReportController extends Controller
     /**
      * Show paginated list of rental transactions (active & completed) with filters.
      */
-    public function rentalsIndex(Request $request)
-    {
-        $query = Transaction::with(['game','user','admin'])
-            ->where('type', 'rental')
-            ->when($request->status, fn($q) => $q->where('status', $request->status))
-            ->when($request->q, fn($q) => $q->whereHas('user', fn($qq) => $qq->where('name', 'like', '%'.$request->q.'%'))
-                                         ->orWhereHas('game', fn($qq) => $qq->where('title', 'like', '%'.$request->q.'%')))
-            ->orderBy('rented_at', 'desc');
+   public function rentalsIndex(Request $request)
+{
+    // debug: simple unconditional query
+    $transactions = \App\Models\Transaction::with(['game','user','admin'])
+        ->where('type', 'rental')
+        ->orderBy('rented_at', 'desc')
+        ->paginate(25);
 
-        $transactions = $query->paginate(25)->withQueryString();
+    return view('admin.rentals', compact('transactions'));
+}
 
-        return view('admin.rentals', compact('transactions'));
-    }
 
     /**
      * Mark a rental transaction as returned (admin action).

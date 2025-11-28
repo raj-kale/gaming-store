@@ -30,6 +30,13 @@ Route::middleware(['auth','is_admin'])->prefix('admin')->group(function () {
 });
 
 
+use App\Http\Controllers\RentController;
+
+Route::middleware(['auth'])->group(function () {
+    Route::post('/games/{game}/rent', [RentController::class, 'rent'])->name('games.rent');
+});
+
+
 // temporary debug route — remove after debugging
 Route::get('/whoami', function () {
     return response()->json([
@@ -37,3 +44,4 @@ Route::get('/whoami', function () {
         'user'       => auth()->user(),
     ]);
 })->middleware('web'); // ensure web session middleware is applied
+
