@@ -82,11 +82,10 @@
     </a> -->
 
     @auth
-
-    <!-- user only -->
-    @if(!auth()->user()->isAdmin())
-
+        
+    
         {{-- BUY --}}
+
 @if($game->stock > 0)
     <form action="{{ route('checkout') }}" method="GET" class="m-0 p-0">
         <input type="hidden" name="game_id" value="{{ $game->id }}">
@@ -120,8 +119,6 @@
                      viewBox="0 0 24 24"><path d="M12 6v6l4 2m6-2a10 10 0 11-20 0 10 10 0 0120 0z"/></svg>
                 Rent
             </a>
-        @endif
-
         @endif
 
         {{-- ADMIN ONLY --}}
