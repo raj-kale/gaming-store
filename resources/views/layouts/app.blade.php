@@ -18,13 +18,30 @@
 
             <div class="flex items-center gap-6 text-gray-700 font-medium">
                 @auth
-                    
+                    @if(!auth()->user()->isAdmin())
                     <a href="{{ route('orders.index') }}" class="hover:text-blue-600">My Orders</a>
                     <a href="{{ route('rentals.index') }}" class="hover:text-blue-600">My Rentals</a>
-                    
-                    @if(auth()->user()->isAdmin())
-                    <a href="{{ route('games.create') }}" class="hover:text-blue-600">Add Game</a>
                     @endif
+
+                    {{-- in your layout nav (where Add Game is shown) --}}
+@if(auth()->user()->isAdmin())
+    <a href="{{ route('games.create') }}" class="hover:text-blue-600">Add Game</a>
+
+    {{-- Track Rentals link with active rentals count --}}
+  @php
+    $activeRentalsCount = \App\Models\Transaction::where('type', 'rental')
+        ->where('status', 'active')
+        ->count();
+@endphp
+
+    <a href="{{ route('admin.rentals.index') }}" class="hover:text-blue-600 flex items-center gap-2">
+        Track Rentals
+        @if($activeRentalsCount > 0)
+            <span class="ml-1 inline-block bg-red-600 text-white text-xs px-2 py-0.5 rounded-full">{{ $activeRentalsCount }}</span>
+        @endif
+    </a>
+@endif
+
                     <form method="POST" action="{{ route('logout') }}" class="inline">
                         @csrf
                         <button class="hover:text-red-600">Logout</button>
