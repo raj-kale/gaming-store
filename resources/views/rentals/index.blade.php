@@ -11,19 +11,26 @@
         @foreach ($rentals as $rental)
             <div class="bg-white p-5 rounded-lg shadow">
                 
-                <!-- Game Image if available -->
-                @if ($rental->game->hasMedia('images'))
+                <!-- Game Image -->
+                @if ($rental->game && $rental->game->hasMedia('images'))
                     <img src="{{ $rental->game->getFirstMediaUrl('images', 'thumb') }}"
-                        class="w-full h-40 object-cover rounded mb-3">
+                         class="w-full h-40 object-cover rounded mb-3">
                 @endif
 
                 <h2 class="text-xl font-bold mb-1">{{ $rental->game->title }}</h2>
 
-                <p class="text-gray-700"><strong>Start:</strong> {{ $rental->start_date->format('M d, Y') }}</p>
-                <p class="text-gray-700"><strong>End:</strong> {{ $rental->end_date->format('M d, Y') }}</p>
+                <p class="text-gray-700">
+                    <strong>Start:</strong> 
+                    {{ optional($rental->rented_at)->format('M d, Y') }}
+                </p>
+
+                <p class="text-gray-700">
+                    <strong>End:</strong> 
+                    {{ optional($rental->due_at)->format('M d, Y') }}
+                </p>
 
                 <p class="mt-2 font-semibold text-blue-600">
-                    Total: Rs. {{ $rental->total }}
+                    Total: Rs. {{ $rental->price }}
                 </p>
 
             </div>

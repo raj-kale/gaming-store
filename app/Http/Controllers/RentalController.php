@@ -50,6 +50,7 @@ class RentalController extends Controller
                     'price'     => ($game->rental_price ?? 0) * $days,
                     'rented_at' => $startDate,
                     'due_at'    => $dueDate,
+
                 ]);
 
                 // optional: decrement game stock if you track stock
