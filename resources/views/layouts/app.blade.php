@@ -21,6 +21,8 @@
                     @if(!auth()->user()->isAdmin())
                     <a href="{{ route('orders.index') }}" class="hover:text-blue-600">My Orders</a>
                     <a href="{{ route('rentals.index') }}" class="hover:text-blue-600">My Rentals</a>
+                    <a href="{{ route('cart.index') }}" class="hover:text-blue-600">🛒 Cart</a>
+                        
                     @endif
 
                     {{-- in your layout nav (where Add Game is shown) --}}
@@ -51,9 +53,9 @@
                      <a href="{{ route('register') }}" class="ml-4">Register</a>
                 @endauth
 
-                @auth
+                <!-- @auth
     <a href="{{ route('cart.index') }}" class="hover:text-blue-600">🛒 Cart</a>
-@endauth
+@endauth -->
 
             </div>
 
