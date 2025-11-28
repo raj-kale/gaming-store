@@ -17,9 +17,9 @@
         <h1 class="text-3xl font-bold mb-4">{{ $game->title }}</h1>
         <p class="text-gray-700 mb-6">{{ $game->description }}</p>
         
-        <p class="text-2xl font-bold text-blue-600 mb-4">${{ $game->price }}</p>
+        <p class="text-2xl font-bold text-blue-600 mb-4">Rs. {{ $game->price }}</p>
         @if($game->rental_price)
-            <p class="text-lg text-green-600 mb-4">Rent: ${{ $game->rental_price }}/day</p>
+            <p class="text-lg text-green-600 mb-4">Rent: Rs. {{ $game->rental_price }}/day</p>
         @endif
         <p class="text-gray-600 mb-6">Stock: {{ $game->stock }}</p>
 
