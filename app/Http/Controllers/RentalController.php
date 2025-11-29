@@ -10,11 +10,20 @@ use Illuminate\Support\Facades\DB;
 class RentalController extends Controller
 {
     // Show user's rentals
-    public function index()
-    {
-        $rentals = auth()->user()->transactions()->where('type','rental')->with('game')->latest()->get();
-        return view('rentals.index', compact('rentals'));
-    }
+   // Show user's active rentals (hide returned/completed/cancelled)
+public function index()
+{
+    $rentals = auth()->user()
+        ->transactions()            // user's transactions relation
+        ->where('type', 'rental')   // only rentals
+        ->where('status', 'active') // only active ones (hides completed/cancelled)
+        ->with('game')
+        ->latest()
+        ->get();
+
+    return view('rentals.index', compact('rentals'));
+}
+
 
     // Show rental form
     public function create(Game $game)
