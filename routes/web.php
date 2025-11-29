@@ -3,6 +3,7 @@ use App\Http\Controllers\GameController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\RentalController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\Admin\OrderAdminController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ReportController;
 
@@ -56,3 +57,13 @@ Route::get('/whoami', function () {
     ]);
 })->middleware('web'); // ensure web session middleware is applied
 
+Route::middleware(['auth'])->group(function(){
+     Route::get('/admin/orders', [\App\Http\Controllers\Admin\OrderAdminController::class, 'index'])
+        ->name('admin.orders.index');
+
+    Route::patch('/admin/orders/{transaction}/cancel', [\App\Http\Controllers\Admin\OrderAdminController::class, 'cancel'])
+        ->name('admin.orders.cancel');
+
+    Route::patch('/admin/orders/{transaction}/refund', [\App\Http\Controllers\Admin\OrderAdminController::class, 'refund'])
+        ->name('admin.orders.refund');
+});

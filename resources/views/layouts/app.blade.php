@@ -38,10 +38,14 @@
 
     <a href="{{ route('admin.rentals.index') }}" class="hover:text-blue-600 flex items-center gap-2">
         Track Rentals
-        @if($activeRentalsCount > 0)
-            <span class="ml-1 inline-block bg-red-600 text-white text-xs px-2 py-0.5 rounded-full">{{ $activeRentalsCount }}</span>
-        @endif
+       
     </a>
+
+    <a href="{{ route('admin.orders.index') }}" class="hover:text-blue-600 flex items-center gap-2">
+        Track Orders
+        
+    </a>
+
 @endif
 
                     <form method="POST" action="{{ route('logout') }}" class="inline">

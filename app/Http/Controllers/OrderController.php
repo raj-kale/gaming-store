@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\Transaction;
 
 use App\Models\Game;
 use App\Models\Order;
@@ -77,7 +78,9 @@ class OrderController extends Controller
 
     public function placeOrder(Request $request)
 {
-    // SINGLE CHECKOUT (Buy Now)
+    // ============================
+    // 1️⃣ SINGLE CHECKOUT (Buy Now)
+    // ============================
     if ($request->has('game_id')) {
         $game = Game::findOrFail($request->game_id);
         $quantity = $request->quantity ?? 1;
@@ -86,12 +89,25 @@ class OrderController extends Controller
             return back()->with('error', $game->title . ' is out of stock.');
         }
 
-        Order::create([
-            'user_id' => auth()->id(),
-            'game_id' => $game->id,
+        // Create order table entry
+        $order = Order::create([
+            'user_id'  => auth()->id(),
+            'game_id'  => $game->id,
             'quantity' => $quantity,
-            'total' => $game->price * $quantity,
-            'status' => 'paid',
+            'total'    => $game->price * $quantity,
+            'status'   => 'paid',
+        ]);
+
+        // Create transaction entry for admin tracking
+        Transaction::create([
+            'user_id'  => auth()->id(),
+            'game_id'  => $game->id,
+            'admin_id' => null,
+            'type'     => 'sale',
+            'status'   => 'completed',
+            'price'    => $game->price * $quantity,
+            'sold_at'  => now(),
+            'notes'    => null,
         ]);
 
         $game->decrement('stock', $quantity);
@@ -100,7 +116,9 @@ class OrderController extends Controller
                          ->with('success', 'Order placed successfully!');
     }
 
-    // CART CHECKOUT
+    // =======================
+    // 2️⃣ CART CHECKOUT
+    // =======================
     $cart = session()->get('cart', []);
 
     if (empty($cart)) {
@@ -108,18 +126,32 @@ class OrderController extends Controller
     }
 
     foreach ($cart as $id => $item) {
+
         $game = Game::find($id);
 
         if ($game->stock < $item['quantity']) {
             return back()->with('error', $game->title . ' is out of stock.');
         }
 
+        // Create order
         Order::create([
-            'user_id' => auth()->id(),
-            'game_id' => $id,
+            'user_id'  => auth()->id(),
+            'game_id'  => $id,
             'quantity' => $item['quantity'],
-            'total' => $item['price'] * $item['quantity'],
-            'status' => 'paid',
+            'total'    => $item['price'] * $item['quantity'],
+            'status'   => 'paid',
+        ]);
+
+        // Create transaction for admin tracking
+        Transaction::create([
+            'user_id'  => auth()->id(),
+            'game_id'  => $id,
+            'admin_id' => null,
+            'type'     => 'sale',
+            'status'   => 'completed',
+            'price'    => $item['price'] * $item['quantity'],
+            'sold_at'  => now(),
+            'notes'    => null,
         ]);
 
         $game->decrement('stock', $item['quantity']);
@@ -128,7 +160,8 @@ class OrderController extends Controller
     session()->forget('cart');
 
     return redirect()->route('orders.index')
-                     ->with('success','Order Placed Successfully');
+                     ->with('success', 'Order Placed Successfully');
 }
+
 
 }
