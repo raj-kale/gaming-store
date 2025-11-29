@@ -106,6 +106,7 @@ class OrderController extends Controller
             'type'     => 'sale',
             'status'   => 'completed',
             'price'    => $game->price * $quantity,
+            'quantity' => $quantity,
             'sold_at'  => now(),
             'notes'    => null,
         ]);
