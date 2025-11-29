@@ -71,6 +71,15 @@
         </div>
     @endif
 
+     <!-- ERROR MESSAGE -->
+    @if(session('error'))
+        <div class="max-w-4xl mx-auto mt-6">
+            <div class="bg-green-100 border border-green-300 text-green-800 px-4 py-3 rounded-md shadow">
+                {{ session('error') }}
+            </div>
+        </div>
+    @endif
+
     <!-- PAGE CONTENT -->
     <main class="max-w-7xl mx-auto px-4 py-10">
         @yield('content')

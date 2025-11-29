@@ -3,6 +3,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Game;
 use Illuminate\Http\Request;
+use App\Models\Transaction;
+use Illuminate\Support\Facades\DB;
+
 
 class GameController extends Controller
 {
@@ -114,11 +117,40 @@ class GameController extends Controller
     }
 
     // Admin: Delete game
-    public function destroy(Game $game)
-    {
-        $game->delete(); // Spatie auto-deletes media
-        return redirect()->route('games.index')->with('success', 'Game deleted!');
+  
+public function destroy(Game $game)
+{
+    // Safety: ask for a DB backup in logs (admin should backup before destructive ops)
+    // Check active transactions first
+    $hasActive = Transaction::where('game_id', $game->id)
+        ->where('status', 'active')
+        ->exists();
+
+    if ($hasActive) {
+        return redirect()->route('games.index')
+            ->with('error', 'Cannot delete game: there are active rentals/sales for this game. Wait until they are returned/completed.');
     }
+
+    // No active transactions: delete completed/cancelled transactions, then delete the game
+    try {
+        DB::transaction(function () use ($game) {
+            // Delete historical (non-active) transactions referencing this game.
+            Transaction::where('game_id', $game->id)
+                ->whereIn('status', ['completed', 'cancelled'])
+                ->delete();
+
+            // Now safe to delete the game (foreign key will not block)
+            $game->delete(); // Spatie handles media deletion if configured
+        });
+
+        return redirect()->route('games.index')->with('success', 'Game and its completed transaction history have been deleted.');
+    } catch (\Throwable $e) {
+        // Log the exception or show friendly message
+        \Log::error('Failed to delete game and its transactions', ['game_id' => $game->id, 'error' => $e->getMessage()]);
+        return redirect()->route('games.index')->with('error', 'Failed to delete game. See logs for details.');
+    }
+}
+
 
     // Delete specific image
     public function deleteImage($gameId, $mediaId)
