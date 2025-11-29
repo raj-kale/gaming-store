@@ -12,7 +12,10 @@
         <input type="text" name="search" value="{{ request('search') }}"
                placeholder="Search games..."
                class="w-full border rounded px-3 py-2">
+
+               
     </div>
+    
 
     <!-- Price Min -->
     <div>
@@ -45,6 +48,11 @@
         </button>
     </div>
 </form>
+@if($noResults)
+    <div class="bg-yellow-100 border border-yellow-300 text-yellow-800 px-4 py-3 rounded mb-4">
+        No games match your search: <strong>{{ request('search') }}</strong>
+    </div>
+@endif
 
 
 <div class="grid grid-cols-3 gap-6">

@@ -16,13 +16,21 @@ class GameController extends Controller
         $query = Game::query();
 
     // SEARCH
-    if ($request->filled('search')) {
-        $search = $request->search;
-        $query->where(function ($q) use ($search) {
-            $q->where('title', 'LIKE', "%{$search}%")
-              ->orWhere('description', 'LIKE', "%{$search}%");
-        });
-    }
+if ($request->filled('search')) {
+    $search = $request->search;
+
+    $query->where(function ($q) use ($search) {
+        $q->where('title', 'LIKE', "%{$search}%")
+          ->orWhere('description', 'LIKE', "%{$search}%");
+    });
+}
+
+$games = $query->get();
+
+$noResults = $games->isEmpty() && $request->filled('search');
+
+return view('games.index', compact('games', 'noResults'));
+
 
     //price filter MIN
     if($request->filled('price_min')){
